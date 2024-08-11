@@ -12,22 +12,28 @@ export class Item extends Component<IItem> {
 	protected itemImage: HTMLImageElement;
 	protected itemPrice: HTMLSpanElement;
 	protected itemId: string;
-	protected itemDescription: string;
+	protected itemDescription?: HTMLElement;
 
 	constructor(protected container: HTMLElement, events: IEvents) {
 		super(container);
 		this.events = events;
 		// this.element = cloneTemplate(template);
 
-		this.itemButton = this.container.querySelector('.gallery__item');
 		this.itemCategory = this.container.querySelector('.card__category');
 		this.itemTitle = this.container.querySelector('.card__title');
 		this.itemImage = this.container.querySelector('.card__image');
 		this.itemPrice = this.container.querySelector('.card__price');
+		this.itemDescription =
+			this.container.querySelector('.card__text') ?? undefined;
+		this.itemButton = this.container.querySelector('.gallery__item');
+		if (!this.itemButton) {
+			console.error('Item button not found');
+			return;
+		}
 
-		// this.itemButton.addEventListener('click', () => {
-		// 	this.events.emit('card:select', { card: this });
-		// });
+		this.container.addEventListener('click', () => {
+			this.events.emit('item:select', { item: this });
+		});
 
 		//добавить метод, добавлен ли товар в корзину или нет
 	}
@@ -42,7 +48,9 @@ export class Item extends Component<IItem> {
 	}
 
 	set description(description: string) {
-		this.itemDescription = description;
+		if (this.itemDescription) {
+			this.itemDescription.textContent = description;
+		}
 	}
 
 	set category(category: string) {

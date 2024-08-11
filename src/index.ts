@@ -9,6 +9,7 @@ import { testItems } from './utils/tempConstants';
 import { Item } from './components/Item';
 import { ItemsContainer } from './components/ItemsContainer';
 import { cloneTemplate } from './utils/utils';
+import { ModalWithItem } from './components/ModalWithItem';
 
 const events = new EventEmitter();
 
@@ -16,6 +17,7 @@ const baseApi: IApi = new Api(API_URL, settings);
 const api = new AppApi(baseApi);
 
 const itemsData = new ItemData(events);
+const imageModal = new ModalWithItem(document.querySelector('.modal'), events);
 
 const itemTemplate: HTMLTemplateElement =
 	document.querySelector('#card-catalog');
@@ -164,4 +166,12 @@ events.on('initialData:loaded', () => {
 	});
 
 	itemsContainer.render({ catalog: itemsArray });
+});
+
+events.on('item:select', (data: { item: Item }) => {
+	const { item } = data;
+	const itemData = itemsData.getItem(item.id);
+	if (itemData) {
+		imageModal.render({ item });
+	}
 });
