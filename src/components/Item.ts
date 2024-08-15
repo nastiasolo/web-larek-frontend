@@ -25,11 +25,11 @@ export class Item extends Component<IItem> {
 		this.itemPrice = this.container.querySelector('.card__price');
 		this.itemDescription =
 			this.container.querySelector('.card__text') ?? undefined;
-		this.itemButton = this.container.querySelector('.gallery__item');
-		if (!this.itemButton) {
-			console.error('Item button not found');
-			return;
-		}
+		// this.itemButton = this.container.querySelector('.gallery__item');
+		// if (!this.itemButton) {
+		// 	console.error('Item button not found');
+		// 	return;
+		// }
 
 		this.container.addEventListener('click', () => {
 			this.events.emit('item:select', { item: this });

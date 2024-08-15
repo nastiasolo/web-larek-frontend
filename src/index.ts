@@ -2,7 +2,7 @@ import { AppApi } from './components/AppApi';
 import { EventEmitter } from './components/base/events';
 import { ItemData } from './components/ItemsData';
 import './scss/styles.scss';
-import { IApi } from './types';
+import { IApi, IItem } from './types';
 import { Api } from './components/base/api';
 import { API_URL, settings } from './utils/constants';
 import { testItems } from './utils/tempConstants';
@@ -10,14 +10,32 @@ import { Item } from './components/Item';
 import { ItemsContainer } from './components/ItemsContainer';
 import { cloneTemplate } from './utils/utils';
 import { ModalWithItem } from './components/ModalWithItem';
+import { BasketData } from './components/BasketData';
+// import { ModalWithBasket } from './components/ModalWithBasket';
 
 const events = new EventEmitter();
 
 const baseApi: IApi = new Api(API_URL, settings);
 const api = new AppApi(baseApi);
 
+//Кнопка корзины и обработчик клика
+const basketButton = document.querySelector('.header__basket');
+// basketButton.addEventListener('click', () => events.emit('basket:open'));
+
 const itemsData = new ItemData(events);
-const imageModal = new ModalWithItem(document.querySelector('.modal'), events);
+const basketData = new BasketData(events);
+const imageModal = new ModalWithItem(
+	document.querySelector('#info-modal'),
+	events,
+	basketData
+);
+
+// const basketModal = new ModalWithBasket(
+// 	document.querySelector('#basket-modal'),
+// 	events
+// );
+
+// const page = new Page(document.body, events);
 
 const itemTemplate: HTMLTemplateElement =
 	document.querySelector('#card-catalog');
@@ -171,7 +189,33 @@ events.on('initialData:loaded', () => {
 events.on('item:select', (data: { item: Item }) => {
 	const { item } = data;
 	const itemData = itemsData.getItem(item.id);
+	console.log(itemData, 'itemData');
 	if (itemData) {
-		imageModal.render({ item });
+		imageModal.render({ item: itemData });
+		// imageModal.open();
+		imageModal.itemData = itemData;
 	}
 });
+
+events.on('basket:add-item', (item: IItem) => {
+	basketData.addItem(item);
+});
+
+events.on('basket:update', (data) => {
+	console.log('Корзина обновлена:', data);
+});
+
+// // Блокируем прокрутку страницы если открыта модалка
+// events.on('modal:open', () => {
+// 	page.locked = true;
+// });
+
+// // ... и разблокируем
+// events.on('modal:close', () => {
+// 	page.locked = false;
+// });
+
+// events.on('basket:open', () => {
+// 	basketModal.render();
+// 	basketModal.open();
+// });

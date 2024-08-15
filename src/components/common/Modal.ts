@@ -4,6 +4,7 @@ import { Component } from '../Component';
 export class Modal<T> extends Component<T> {
 	protected modal: HTMLElement;
 	protected events: IEvents;
+	protected content: T | null = null;
 
 	constructor(container: HTMLElement, events: IEvents) {
 		super(container);
@@ -20,12 +21,16 @@ export class Modal<T> extends Component<T> {
 	}
 
 	open() {
-		this.container.classList.add('.modal_active');
-		document.removeEventListener('keyup', this.handleEscUp);
+		this.container.classList.add('modal_active');
+		document.addEventListener('keyup', this.handleEscUp);
 	}
 
 	close() {
 		this.container.classList.remove('modal_active');
+		this.content = null;
+		// this.container.querySelectorAll('.modal__content').forEach(element => {
+		//   element.innerHTML = '';
+		// });
 		document.removeEventListener('keyup', this.handleEscUp);
 	}
 
