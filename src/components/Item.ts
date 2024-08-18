@@ -6,11 +6,11 @@ import { Component } from './Component';
 export class Item extends Component<IItem> {
 	protected element: HTMLElement;
 	protected events: IEvents;
-	protected itemButton: HTMLButtonElement;
-	protected itemCategory: HTMLSpanElement;
+	protected itemButton?: HTMLButtonElement;
+	protected itemCategory?: HTMLSpanElement;
 	protected itemTitle: HTMLElement;
-	protected itemImage: HTMLImageElement;
-	protected itemPrice: HTMLSpanElement;
+	protected itemImage?: HTMLImageElement;
+	protected itemPrice?: HTMLSpanElement;
 	protected itemId: string;
 	protected itemDescription?: HTMLElement;
 
@@ -25,11 +25,13 @@ export class Item extends Component<IItem> {
 		this.itemPrice = this.container.querySelector('.card__price');
 		this.itemDescription =
 			this.container.querySelector('.card__text') ?? undefined;
-		// this.itemButton = this.container.querySelector('.gallery__item');
+		this.itemButton = this.container.querySelector('.button');
 		// if (!this.itemButton) {
 		// 	console.error('Item button not found');
 		// 	return;
 		// }
+
+		//СНЯТЬ КЛИК!! ДУБЛИРУЕТСЯ
 
 		this.container.addEventListener('click', () => {
 			this.events.emit('item:select', { item: this });
@@ -54,12 +56,36 @@ export class Item extends Component<IItem> {
 	}
 
 	set category(category: string) {
-		this.itemCategory.textContent = category;
+		if (this.itemCategory) {
+			switch (category) {
+				case 'софт-скил':
+					this.itemCategory.classList.add('card__category_soft');
+					break;
+				case 'хард-скил':
+					this.itemCategory.classList.add('card__category_hard');
+					break;
+				case 'другое':
+					this.itemCategory.classList.add('card__category_other');
+					break;
+				case 'дополнительное':
+					this.itemCategory.classList.add('card__category_additional');
+					break;
+				case 'кнопка':
+					this.itemCategory.classList.add('card__category_button');
+					break;
+				default:
+					this.itemCategory.style.backgroundColor = 'blue';
+					break;
+			}
+			this.itemCategory.textContent = category;
+		}
 	}
 
 	set image(image: string) {
-		this.itemImage.src =
-			'https://larek-api.nomoreparties.co/content/weblarek/' + image;
+		if (this.itemImage) {
+			this.itemImage.src =
+				'https://larek-api.nomoreparties.co/content/weblarek/' + image;
+		}
 	}
 
 	set price(price: number | null) {

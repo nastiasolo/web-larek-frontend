@@ -14,7 +14,7 @@ export interface IUser {
 	phone: string;
 }
 
-export interface IBasket {
+export interface IBasketData {
 	items: [IItem];
 	total: number;
 	getTotal(items: [IItem]): number;

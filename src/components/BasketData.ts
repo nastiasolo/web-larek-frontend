@@ -9,6 +9,7 @@ export class BasketData {
 		this.events = events;
 		//подписка на событие добавления товара в корзину (по кнопке "в корзину")
 		this.events.on('basket:add-item', this.addItem.bind(this));
+		this.events.on('basket:remove-item', this.removeItem.bind(this));
 	}
 
 	// Метод для добавления товара в корзину
@@ -47,7 +48,8 @@ export class BasketData {
 	// Обновление корзины
 	private updateBasket(): void {
 		this.events.emit('basket:update', {
-			items: this.items,
+			// items: this.items,
+			items: this.getItems(),
 			totalPrice: this.getTotalPrice(),
 		});
 	}
