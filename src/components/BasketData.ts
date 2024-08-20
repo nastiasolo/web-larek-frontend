@@ -45,6 +45,12 @@ export class BasketData {
 		return this.items.reduce((total, item) => total + (item.price || 0), 0);
 	}
 
+	// Метод для очистки корзины
+	clearBasket(): void {
+		this.items = [];
+		this.updateBasket();
+	}
+
 	// Обновление корзины
 	private updateBasket(): void {
 		this.events.emit('basket:update', {

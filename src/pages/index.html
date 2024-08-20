@@ -59,7 +59,9 @@
 								Если планируете решать задачи в тренажёре, берите два.
 							</p>
 							<div class="card__row">
-								<button class="button">В корзину</button>
+								<button class="button card__button card-add-button">
+									В корзину
+								</button>
 								<span class="card__price">1000 синапсов</span>
 							</div>
 						</div>
@@ -112,19 +114,19 @@
 			</div>
 		</div>
 
-		<div class="modal">
+		<div class="modal" id="order-modal">
 			<div class="modal__container">
 				<button class="modal__close" aria-label="закрыть"></button>
 				<div class="modal__content">
-					<form class="form">
+					<form class="form" name="order">
 						<div class="order">
 							<div class="order__field">
 								<h2 class="modal__title">Способ оплаты</h2>
 								<div class="order__buttons">
-									<button type="button" class="button button_alt">
+									<button type="button" name="card" class="button button_alt">
 										Онлайн
 									</button>
-									<button type="button" class="button button_alt">
+									<button type="button" name="cash" class="button button_alt">
 										При получении
 									</button>
 								</div>
@@ -132,6 +134,7 @@
 							<label class="order__field">
 								<span class="form__label modal__title">Адрес доставки</span>
 								<input
+									name="address"
 									class="form__input"
 									type="text"
 									placeholder="Введите адрес"
@@ -139,47 +142,61 @@
 							</label>
 						</div>
 						<div class="modal__actions">
-							<button disabled class="button">Далее</button>
+							<button disabled class="button button-submit" type="submit">
+								Далее
+							</button>
+							<span class="form__errors"></span>
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
 
-		<div class="modal">
+		<div class="modal" id="contact-modal">
 			<div class="modal__container">
 				<button class="modal__close" aria-label="закрыть"></button>
 				<div class="modal__content">
-					<form class="form">
+					<form class="form" name="contact">
 						<div class="order">
 							<label class="order__field">
 								<span class="form__label modal__title">Email</span>
 								<input
 									class="form__input"
 									type="text"
+									name="email"
 									placeholder="Введите Email"
 								/>
 							</label>
 							<label class="order__field">
 								<span class="form__label modal__title">Телефон</span>
-								<input class="form__input" type="text" placeholder="+7 (" />
+								<input
+									class="form__input"
+									name="phone"
+									type="text"
+									placeholder="+7 ("
+								/>
 							</label>
 						</div>
 						<div class="modal__actions">
-							<button disabled class="button">Оплатить</button>
+							<button disabled class="button button-submit" type="submit">
+								Оплатить
+							</button>
+							<span class="form__errors"></span>
 						</div>
 					</form>
 				</div>
 			</div>
 		</div>
 
-		<div class="modal">
+		<div class="modal success-modal">
 			<div class="modal__container">
 				<button class="modal__close" aria-label="закрыть"></button>
 				<div class="modal__content">
 					<div class="order-success">
 						<h2 class="film__title">Заказ оформлен</h2>
-						<p class="film__description">Списано 153 250 синапсов</p>
+						<p class="film__description order-success__description">
+							Списано 153 250 синапсов
+						</p>
 						<button class="button order-success__close">
 							За новыми покупками!
 						</button>

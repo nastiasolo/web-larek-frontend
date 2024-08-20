@@ -12,6 +12,10 @@ import { cloneTemplate } from './utils/utils';
 import { ModalWithItem } from './components/ModalWithItem';
 import { BasketData } from './components/BasketData';
 import { ModalWithBasket } from './components/ModalWithBasket';
+import { Form } from './components/common/Form';
+import { OrderForm } from './components/OrderForm';
+import { Modal } from './components/common/Modal';
+import { ModalWithSucess } from './components/ModalWithSucess';
 
 const events = new EventEmitter();
 const baseApi: IApi = new Api(API_URL, settings);
@@ -23,10 +27,12 @@ events.onAll((event) => {
 });
 
 // Все шаблоны
-const basketTemplate = cloneTemplate('#basket');
 const itemTemplate: HTMLTemplateElement =
 	document.querySelector('#card-catalog');
 // const basketTemplate: HTMLTemplateElement = document.querySelector('#basket');
+const orderFormTemplate: HTMLTemplateElement = document.querySelector('#order');
+const successTemplate: HTMLTemplateElement = document.querySelector('#success');
+console.log(orderFormTemplate);
 
 // Модель данных
 const itemsData = new ItemData(events);
@@ -43,6 +49,15 @@ const basketModal = new ModalWithBasket(
 	document.querySelector('#basket-modal'),
 	events
 );
+
+const successModal = new ModalWithSucess(
+	document.querySelector('.success-modal'),
+	events
+);
+
+//Формы
+const orderForm = new OrderForm(document.querySelector('#order-modal'), events);
+const contactForm = new Form(document.querySelector('#contact-modal'), events);
 
 //Кнопка корзины и обработчик клика
 const basketButton = document.querySelector('.header__basket');
@@ -105,6 +120,7 @@ events.on('initialData:loaded', () => {
 	console.log(itemsData.items);
 	const itemsArray = itemsData.items.map((item) => {
 		const itemInstant = new Item(cloneTemplate(itemTemplate), events);
+
 		return itemInstant.render(item);
 	});
 
@@ -141,14 +157,28 @@ events.on('basket:update', (data: { items: IItem[]; totalPrice: number }) => {
 	//	basketModal.render(data: { items: IItem[]; totalPrice: number });
 });
 
-//Открываем форму для заказа
+// Корзина подтверждена
+events.on('basket:order', () => {
+	basketModal.close();
+	// orderForm.render();
+	orderForm.open();
+});
 
-// // Блокируем прокрутку страницы если открыта модалка
-// events.on('modal:open', () => {
-// 	page.locked = true;
-// });
+//Форма "order" подтверждена
+events.on('order:submit', () => {
+	orderForm.close();
+	contactForm.open();
+});
 
-// // ... и разблокируем
-// events.on('modal:close', () => {
-// 	page.locked = false;
-// });
+events.on('contact:submit', () => {
+	contactForm.close();
+	const total = basketData.getTotalPrice();
+	successModal.render({ total });
+	successModal.open();
+});
+
+events.on('success:submit', () => {
+	basketData.clearBasket();
+});
+
+// Не забыть переписать документацию!!!!!

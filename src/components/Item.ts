@@ -25,7 +25,7 @@ export class Item extends Component<IItem> {
 		this.itemPrice = this.container.querySelector('.card__price');
 		this.itemDescription =
 			this.container.querySelector('.card__text') ?? undefined;
-		this.itemButton = this.container.querySelector('.button');
+		this.itemButton = this.container.querySelector('.card-add-button');
 		// if (!this.itemButton) {
 		// 	console.error('Item button not found');
 		// 	return;
@@ -36,8 +36,6 @@ export class Item extends Component<IItem> {
 		this.container.addEventListener('click', () => {
 			this.events.emit('item:select', { item: this });
 		});
-
-		//добавить метод, добавлен ли товар в корзину или нет
 	}
 
 	render(data?: Partial<IItem>): HTMLElement;
@@ -89,10 +87,18 @@ export class Item extends Component<IItem> {
 	}
 
 	set price(price: number | null) {
-		if (price === null) {
-			this.itemPrice.textContent = 'Бесценно';
-		} else {
-			this.itemPrice.textContent = price.toString() + ' синапсов';
+		if (this.itemPrice) {
+			if (price === null) {
+				this.itemPrice.textContent = 'Бесценно';
+				if (this.itemButton) {
+					this.itemButton.disabled = true;
+				}
+			} else {
+				this.itemPrice.textContent = price.toString() + ' синапсов';
+				if (this.itemButton) {
+					this.itemButton.disabled = false;
+				}
+			}
 		}
 	}
 
