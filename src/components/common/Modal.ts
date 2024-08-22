@@ -28,9 +28,6 @@ export class Modal<T> extends Component<T> {
 	close() {
 		this.container.classList.remove('modal_active');
 		this.content = null;
-		// this.container.querySelectorAll('.modal__content').forEach(element => {
-		//   element.innerHTML = '';
-		// });
 		document.removeEventListener('keyup', this.handleEscUp);
 	}
 

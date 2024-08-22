@@ -54,7 +54,6 @@ export class BasketData {
 	// Обновление корзины
 	private updateBasket(): void {
 		this.events.emit('basket:update', {
-			// items: this.items,
 			items: this.getItems(),
 			totalPrice: this.getTotalPrice(),
 		});

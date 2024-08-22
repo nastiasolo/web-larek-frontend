@@ -5,11 +5,6 @@ export class OrderForm extends Form {
 	constructor(container: HTMLElement, events: IEvents) {
 		super(container, events);
 
-		// this._form.addEventListener('submit', (evt) => {
-		// 	evt.preventDefault();
-		// 	this.events.emit(`${this.formName}:submit`, this.getInputValues());
-		// });
-
 		// Получаем кнопки выбора способа оплаты
 		const paymentButtons = this.container.querySelectorAll(
 			'.order__buttons .button'

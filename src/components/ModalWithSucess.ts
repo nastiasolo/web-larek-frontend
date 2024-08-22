@@ -17,7 +17,6 @@ export class ModalWithSucess extends Modal<IModalWithSucess> {
 
 		this.sucessButton.addEventListener('click', () => {
 			this.close();
-			//добавить логику + тоже самое должно происходить при закрытии окна
 		});
 	}
 

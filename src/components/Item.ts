@@ -1,4 +1,3 @@
-import { cloneTemplate } from '../utils/utils';
 import { IEvents } from './base/events';
 import { IItem } from '../types/index';
 import { Component } from './Component';
@@ -17,7 +16,6 @@ export class Item extends Component<IItem> {
 	constructor(protected container: HTMLElement, events: IEvents) {
 		super(container);
 		this.events = events;
-		// this.element = cloneTemplate(template);
 
 		this.itemCategory = this.container.querySelector('.card__category');
 		this.itemTitle = this.container.querySelector('.card__title');
@@ -36,8 +34,6 @@ export class Item extends Component<IItem> {
 
 	render(itemData: Partial<IItem> | undefined) {
 		if (!itemData) return this.container;
-		// Object.assign(this, itemData);
-		// return this.element;
 		return super.render(itemData);
 	}
 

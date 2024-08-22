@@ -10,14 +10,7 @@ export class ItemData implements IItemData {
 		this.events = events;
 	}
 
-	// set items(items: IItem[]) {
-	// 	this._items = items;
-	// 	this.events.emit('items:changed');
-	// }
-
 	set itemsResponse(response: { total: number; items: IItem[] }) {
-		// this._items = response.items;
-		// this._total = response.total;
 		this._itemsResponse = response;
 		this.events.emit('items:changed');
 	}

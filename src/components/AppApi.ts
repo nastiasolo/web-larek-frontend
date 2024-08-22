@@ -1,5 +1,4 @@
 import { IApi, IItem, IOrderResult, IUserData } from '../types';
-import { UserData } from './UserData';
 
 export class AppApi {
 	private _baseApi: IApi;
@@ -10,7 +9,6 @@ export class AppApi {
 
 	getItems(): Promise<{ total: number; items: IItem[] }> {
 		return this._baseApi.get<{ total: number; items: IItem[] }>('/product');
-		// .then((items: IItem[]) => items);
 	}
 
 	setOrder(order: IUserData): Promise<IOrderResult> {

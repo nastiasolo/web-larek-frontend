@@ -33,7 +33,6 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 			this.container.querySelector('.card__text') ?? undefined;
 
 		this.handleAddButtonClick = () => {
-			console.log('clicked');
 			if (this.currentItem) {
 				events.emit('basket:add-item', this.currentItem);
 				this.updateButtonState();
@@ -73,18 +72,6 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 		super.open();
 	}
 
-	// private updateButtonState() {
-	// 	if (
-	// 		this.currentItem &&
-	// 		this.basketData.isItemInBasket(this.currentItem.id)
-	// 	) {
-	// 		this.addButton.disabled = true;
-	// 		this.addButton.textContent = 'В корзине';
-	// 	} else {
-	// 		this.addButton.disabled = false;
-	// 		this.addButton.textContent = 'В корзину';
-	// 	}
-	// }
 	private updateButtonState() {
 		// Проверка, если текущий элемент и его цена установлены
 		if (this.currentItem) {
