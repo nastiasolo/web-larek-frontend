@@ -1,4 +1,5 @@
-import { IApi, IItem, IUser } from '../types';
+import { IApi, IItem, IOrderResult, IUserData } from '../types';
+import { UserData } from './UserData';
 
 export class AppApi {
 	private _baseApi: IApi;
@@ -12,7 +13,13 @@ export class AppApi {
 		// .then((items: IItem[]) => items);
 	}
 
-	// getUser(): Promise<IUser> {
-	// 	return this._baseApi.get<IUser>('/users/me').then((user: IUser) => user);
-	// }
+	setOrder(order: IUserData): Promise<IOrderResult> {
+		return this._baseApi
+			.post<IUserData>(`/order`, order)
+			.then((data: IOrderResult) => data)
+			.catch((error: any) => {
+				console.error('Order submission failed:', error);
+				throw error;
+			});
+	}
 }

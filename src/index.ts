@@ -16,6 +16,7 @@ import { Form } from './components/common/Form';
 import { OrderForm } from './components/OrderForm';
 import { Modal } from './components/common/Modal';
 import { ModalWithSucess } from './components/ModalWithSucess';
+import { UserData } from './components/UserData';
 
 const events = new EventEmitter();
 const baseApi: IApi = new Api(API_URL, settings);
@@ -26,7 +27,7 @@ events.onAll((event) => {
 	console.log(event.eventName, event.data);
 });
 
-// Все шаблоны
+// Шаблон
 const itemTemplate: HTMLTemplateElement =
 	document.querySelector('#card-catalog');
 // const basketTemplate: HTMLTemplateElement = document.querySelector('#basket');
@@ -37,6 +38,7 @@ console.log(orderFormTemplate);
 // Модель данных
 const itemsData = new ItemData(events);
 const basketData = new BasketData(events);
+const userData = new UserData();
 
 //Модальные окна
 const itemModal = new ModalWithItem(
@@ -120,7 +122,6 @@ events.on('initialData:loaded', () => {
 	console.log(itemsData.items);
 	const itemsArray = itemsData.items.map((item) => {
 		const itemInstant = new Item(cloneTemplate(itemTemplate), events);
-
 		return itemInstant.render(item);
 	});
 
@@ -141,7 +142,7 @@ events.on('item:select', (data: { item: Item }) => {
 // Добавился товар в корзину
 events.on('basket:add-item', (item: IItem) => {
 	basketData.addItem(item);
-	events.emit('basket:update', basketData);
+	//events.emit('basket:update', basketData);
 });
 
 // Удаление товара из корзины
@@ -154,27 +155,59 @@ events.on('basket:update', (data: { items: IItem[]; totalPrice: number }) => {
 	console.log('Корзина обновлена:', data);
 	console.log('Количетсов товаров в корзине', basketData.getTotalItems());
 	basketCounter.textContent = basketData.getTotalItems().toString();
-	//	basketModal.render(data: { items: IItem[]; totalPrice: number });
 });
 
 // Корзина подтверждена
-events.on('basket:order', () => {
-	basketModal.close();
-	// orderForm.render();
-	orderForm.open();
-});
+events.on(
+	'basket:order',
+	(basketData: { data: { items: IItem[]; totalPrice: number } }) => {
+		// Только id товаров
+		const itemIds = basketData.data.items.map((item) => item.id);
+		userData.updateData({
+			items: itemIds,
+			total: basketData.data.totalPrice,
+		});
+		console.log(userData, 'items and total added');
+		basketModal.close();
+		// orderForm.render();
+		orderForm.open();
+	}
+);
+
+//Выбран метод оплаты
+events.on(
+	'order:payment-method-selected',
+	(paymentData: { method: string }) => {
+		const paymentMethod = paymentData.method === 'card' ? 'online' : 'offline';
+		userData.updateData({ payment: paymentMethod });
+		console.log(userData, 'payment method added');
+	}
+);
 
 //Форма "order" подтверждена
-events.on('order:submit', () => {
+events.on('order:submit', (orderData: { address: string }) => {
+	userData.updateData({ address: orderData.address });
+	console.log(userData, 'address added');
+
 	orderForm.close();
 	contactForm.open();
 });
 
-events.on('contact:submit', () => {
+events.on('contact:submit', (contactData: { email: string; phone: string }) => {
+	userData.updateData({ email: contactData.email, phone: contactData.phone });
+	console.log(userData, 'contacts added');
 	contactForm.close();
 	const total = basketData.getTotalPrice();
-	successModal.render({ total });
-	successModal.open();
+	api
+		.setOrder(userData.getData())
+		.then((result) => {
+			console.log(result);
+			successModal.render({ total });
+			successModal.open();
+		})
+		.catch((err) => {
+			console.error(err);
+		});
 });
 
 events.on('success:submit', () => {

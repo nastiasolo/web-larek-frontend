@@ -5,7 +5,7 @@ import { IEvents } from './base/events';
 import { BasketData } from './BasketData';
 import { Modal } from './common/Modal';
 import { Item } from './Item';
-import { ItemInBasket } from './ItemInBasket';
+
 // import { cloneTemplate } from '../utils/utils';
 // import { ensureElement } from '../utils/utils';
 

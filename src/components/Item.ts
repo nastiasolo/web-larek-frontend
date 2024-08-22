@@ -26,12 +26,6 @@ export class Item extends Component<IItem> {
 		this.itemDescription =
 			this.container.querySelector('.card__text') ?? undefined;
 		this.itemButton = this.container.querySelector('.card-add-button');
-		// if (!this.itemButton) {
-		// 	console.error('Item button not found');
-		// 	return;
-		// }
-
-		//СНЯТЬ КЛИК!! ДУБЛИРУЕТСЯ
 
 		this.container.addEventListener('click', () => {
 			this.events.emit('item:select', { item: this });
@@ -90,14 +84,8 @@ export class Item extends Component<IItem> {
 		if (this.itemPrice) {
 			if (price === null) {
 				this.itemPrice.textContent = 'Бесценно';
-				if (this.itemButton) {
-					this.itemButton.disabled = true;
-				}
 			} else {
 				this.itemPrice.textContent = price.toString() + ' синапсов';
-				if (this.itemButton) {
-					this.itemButton.disabled = false;
-				}
 			}
 		}
 	}

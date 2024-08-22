@@ -73,16 +73,36 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 		super.open();
 	}
 
+	// private updateButtonState() {
+	// 	if (
+	// 		this.currentItem &&
+	// 		this.basketData.isItemInBasket(this.currentItem.id)
+	// 	) {
+	// 		this.addButton.disabled = true;
+	// 		this.addButton.textContent = 'В корзине';
+	// 	} else {
+	// 		this.addButton.disabled = false;
+	// 		this.addButton.textContent = 'В корзину';
+	// 	}
+	// }
 	private updateButtonState() {
-		if (
-			this.currentItem &&
-			this.basketData.isItemInBasket(this.currentItem.id)
-		) {
-			this.addButton.disabled = true;
-			this.addButton.textContent = 'В корзине';
-		} else {
-			this.addButton.disabled = false;
-			this.addButton.textContent = 'В корзину';
+		// Проверка, если текущий элемент и его цена установлены
+		if (this.currentItem) {
+			// Если товар уже в корзине
+			if (this.basketData.isItemInBasket(this.currentItem.id)) {
+				this.addButton.disabled = true;
+				this.addButton.textContent = 'В корзине';
+			}
+			// Если цена товара равна null
+			else if (this.currentItem.price === null) {
+				this.addButton.disabled = true;
+				this.addButton.textContent = 'Невозможно добавить';
+			}
+			// Если товар не в корзине и цена известна
+			else {
+				this.addButton.disabled = false;
+				this.addButton.textContent = 'В корзину';
+			}
 		}
 	}
 }

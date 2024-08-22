@@ -7,13 +7,6 @@ export interface IItem {
 	image: string;
 }
 
-export interface IUser {
-	payment: string;
-	address: string;
-	email: string;
-	phone: string;
-}
-
 export interface IBasketData {
 	items: [IItem];
 	total: number;
@@ -30,13 +23,13 @@ export interface IItemData {
 }
 
 export interface IUserData {
-	getUserInfo(): IUser;
-	setUserInfo(userData: IUser): void;
+	payment?: string;
+	email?: string;
+	phone?: string;
+	address?: string;
+	total?: number;
+	items?: string[];
 }
-
-export type TBasketInfo = Pick<IItem, 'title' | 'price'>;
-export type TPaymentInfo = Pick<IUser, 'payment' | 'address'>;
-export type TContactInfo = Pick<IUser, 'email' | 'phone'>;
 
 export type ApiPostMethods = 'POST' | 'PUT' | 'DELETE';
 
@@ -44,4 +37,10 @@ export interface IApi {
 	baseUrl: string;
 	get<T>(uri: string): Promise<T>;
 	post<T>(uri: string, data: object, method?: ApiPostMethods): Promise<T>;
+}
+
+export interface IOrderResult {
+	id?: string;
+	total?: number;
+	error?: string;
 }
