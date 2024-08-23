@@ -69,27 +69,6 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 		super.open();
 	}
 
-	// private updateButtonState() {
-	// 	// Проверка, если текущий элемент и его цена установлены
-	// 	if (this.currentItem) {
-	// 		// Если товар уже в корзине
-	// 		if (this.basketData.isItemInBasket(this.currentItem.id)) {
-	// 			this.addButton.disabled = true;
-	// 			this.addButton.textContent = 'В корзине';
-	// 		}
-	// 		// Если цена товара равна null
-	// 		else if (this.currentItem.price === null) {
-	// 			this.addButton.disabled = true;
-	// 			this.addButton.textContent = 'Невозможно добавить';
-	// 		}
-	// 		// Если товар не в корзине и цена известна
-	// 		else {
-	// 			this.addButton.disabled = false;
-	// 			this.addButton.textContent = 'В корзину';
-	// 		}
-	// 	}
-	// }
-
 	private updateButtonState() {
 		if (this.currentItem) {
 			this.events.emit('item:check-button', { id: this.currentItem.id });
@@ -98,12 +77,15 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 
 	public setButtonState(isInBasket: boolean, price: number | null) {
 		if (isInBasket) {
+			// Если товар уже в корзине
 			this.addButton.disabled = true;
 			this.addButton.textContent = 'В корзине';
 		} else if (price === null) {
+			// Если цена товара равна null
 			this.addButton.disabled = true;
 			this.addButton.textContent = 'Невозможно добавить';
 		} else {
+			// Если товар не в корзине и цена известна
 			this.addButton.disabled = false;
 			this.addButton.textContent = 'В корзину';
 		}
