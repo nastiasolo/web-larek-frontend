@@ -85,6 +85,7 @@ export class ModalWithBasket extends Modal<IModalWithBasket> {
 		if (removeButton) {
 			removeButton.addEventListener('click', () => {
 				this.events.emit('basket:remove-item', { id: itemData.id });
+				event.stopPropagation();
 			});
 		}
 

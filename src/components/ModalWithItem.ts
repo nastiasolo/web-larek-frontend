@@ -1,6 +1,5 @@
 import { IItem } from '../types';
 import { IEvents } from './base/events';
-import { BasketData } from './BasketData';
 import { Modal } from './common/Modal';
 
 export interface IModalWithItem {
@@ -17,14 +16,12 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 	private itemDescription?: HTMLElement;
 	private currentItem: IItem | null = null;
 	private handleAddButtonClick: () => void;
-	private basketData: BasketData;
 
-	constructor(container: HTMLElement, events: IEvents, basketData: BasketData) {
+	constructor(container: HTMLElement, events: IEvents) {
 		super(container, events);
-		this.basketData = basketData;
+		this.events = events;
 
 		this.addButton = this.container.querySelector('.button');
-		console.log('Add Button:', this.addButton);
 		this.itemCategory = this.container.querySelector('.card__category');
 		this.itemTitle = this.container.querySelector('.card__title');
 		this.itemImage = this.container.querySelector('.card__image');
@@ -72,24 +69,43 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 		super.open();
 	}
 
+	// private updateButtonState() {
+	// 	// Проверка, если текущий элемент и его цена установлены
+	// 	if (this.currentItem) {
+	// 		// Если товар уже в корзине
+	// 		if (this.basketData.isItemInBasket(this.currentItem.id)) {
+	// 			this.addButton.disabled = true;
+	// 			this.addButton.textContent = 'В корзине';
+	// 		}
+	// 		// Если цена товара равна null
+	// 		else if (this.currentItem.price === null) {
+	// 			this.addButton.disabled = true;
+	// 			this.addButton.textContent = 'Невозможно добавить';
+	// 		}
+	// 		// Если товар не в корзине и цена известна
+	// 		else {
+	// 			this.addButton.disabled = false;
+	// 			this.addButton.textContent = 'В корзину';
+	// 		}
+	// 	}
+	// }
+
 	private updateButtonState() {
-		// Проверка, если текущий элемент и его цена установлены
 		if (this.currentItem) {
-			// Если товар уже в корзине
-			if (this.basketData.isItemInBasket(this.currentItem.id)) {
-				this.addButton.disabled = true;
-				this.addButton.textContent = 'В корзине';
-			}
-			// Если цена товара равна null
-			else if (this.currentItem.price === null) {
-				this.addButton.disabled = true;
-				this.addButton.textContent = 'Невозможно добавить';
-			}
-			// Если товар не в корзине и цена известна
-			else {
-				this.addButton.disabled = false;
-				this.addButton.textContent = 'В корзину';
-			}
+			this.events.emit('item:check-button', { id: this.currentItem.id });
+		}
+	}
+
+	public setButtonState(isInBasket: boolean, price: number | null) {
+		if (isInBasket) {
+			this.addButton.disabled = true;
+			this.addButton.textContent = 'В корзине';
+		} else if (price === null) {
+			this.addButton.disabled = true;
+			this.addButton.textContent = 'Невозможно добавить';
+		} else {
+			this.addButton.disabled = false;
+			this.addButton.textContent = 'В корзину';
 		}
 	}
 }

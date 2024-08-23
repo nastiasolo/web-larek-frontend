@@ -37,8 +37,7 @@ const userData = new UserData();
 //Модальные окна
 const itemModal = new ModalWithItem(
 	document.querySelector('#info-modal'),
-	events,
-	basketData
+	events
 );
 
 const basketModal = new ModalWithBasket(
@@ -101,6 +100,7 @@ events.on('item:select', (data: { item: Item }) => {
 	const { item } = data;
 	const itemData = itemsData.getItem(item.id);
 	if (itemData) {
+		events.emit('item:check-button', { id: itemData.id });
 		itemModal.render({ item: itemData });
 		itemModal.itemData = itemData;
 	}
@@ -109,11 +109,24 @@ events.on('item:select', (data: { item: Item }) => {
 // Добавился товар в корзину
 events.on('basket:add-item', (item: IItem) => {
 	basketData.addItem(item);
+	events.emit('item:check-button', { id: item.id });
 });
 
 // Удаление товара из корзины
 events.on('basket:remove-item', ({ id }: { id: string }) => {
 	basketData.removeItem(id);
+	events.emit('item:check-button', { id });
+});
+
+//Кнопка "Добавить в корзину"
+events.on('item:check-button', (data: { id: string }) => {
+	const itemId = data.id;
+	const isInBasket = basketData.isItemInBasket(itemId);
+	const item = itemsData.getItem(itemId); //текущий товар
+	const price = item ? item.price : null;
+	if (item) {
+		itemModal.setButtonState(isInBasket, price);
+	}
 });
 
 // Обновление корзины
