@@ -2,14 +2,16 @@ import { IEvents } from './base/events';
 import { Form } from './common/Form';
 
 export class OrderForm extends Form {
+	private paymentButtons: NodeListOf<HTMLButtonElement>;
+
 	constructor(container: HTMLElement, events: IEvents) {
 		super(container, events);
 
 		// Получаем кнопки выбора способа оплаты
-		const paymentButtons = this.container.querySelectorAll(
+		this.paymentButtons = this.container.querySelectorAll(
 			'.order__buttons .button'
 		);
-		paymentButtons.forEach((button) => {
+		this.paymentButtons.forEach((button) => {
 			button.addEventListener(
 				'click',
 				this.handlePaymentMethodSelect.bind(this)
@@ -17,19 +19,20 @@ export class OrderForm extends Form {
 		});
 
 		// Валидация полей ввода
-		this.inputs.forEach((input) => {
-			input.addEventListener('input', this.validate.bind(this));
-		});
+		// this.inputs.forEach((input) => {
+		// 	input.addEventListener('input', this.validate.bind(this));
+		// });
+		this.validateForm();
 	}
 
 	private handlePaymentMethodSelect(event: MouseEvent) {
 		const target = event.target as HTMLButtonElement;
 
 		// Удаляем активное состояние у всех кнопок
-		const paymentButtons = this.container.querySelectorAll(
-			'.order__buttons .button'
-		);
-		paymentButtons.forEach((button) =>
+		// const paymentButtons = this.container.querySelectorAll(
+		// 	'.order__buttons .button'
+		// );
+		this.paymentButtons.forEach((button) =>
 			button.classList.remove('button_alt-active')
 		);
 
@@ -40,16 +43,17 @@ export class OrderForm extends Form {
 		this.events.emit('order:payment-method-selected', { method: target.name });
 
 		// Проверяем валидность формы после выбора способа оплаты
-		this.validate();
+		this.validateForm();
 	}
 
-	protected validate() {
+	protected validateForm() {
 		let isValid = true;
 
 		// Проверяем валидность каждого поля
 		this.inputs.forEach((input) => {
-			if (!input.value.trim()) {
+			if (input.value.trim() === '') {
 				isValid = false;
+				this.showInputError();
 			}
 		});
 
@@ -58,11 +62,16 @@ export class OrderForm extends Form {
 			'.order__buttons .button_alt-active'
 		);
 		if (!activePaymentButton) {
-			this.errorSpan.textContent = 'Заполните все поля';
 			isValid = false;
+			this.errorSpan.textContent = 'Выберите способ оплаты';
+		} else {
+			this.errorSpan.textContent = '';
 		}
 
 		this.valid = isValid;
-		this.errorSpan.textContent = '';
+	}
+
+	set valid(isValid: boolean) {
+		super.valid = isValid;
 	}
 }
