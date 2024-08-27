@@ -63,9 +63,9 @@ export class OrderForm extends Form {
 		);
 		if (!activePaymentButton) {
 			isValid = false;
-			this.errorSpan.textContent = 'Выберите способ оплаты';
+			this.setText(this.errorSpan, 'Выберите способ оплаты');
 		} else {
-			this.errorSpan.textContent = '';
+			this.setText(this.errorSpan, '');
 		}
 
 		this.valid = isValid;

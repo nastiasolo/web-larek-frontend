@@ -39,7 +39,7 @@ export class Item extends Component<IItem> {
 
 	set description(description: string) {
 		if (this.itemDescription) {
-			this.itemDescription.textContent = description;
+			this.setText(this.itemDescription, description);
 		}
 	}
 
@@ -66,12 +66,12 @@ export class Item extends Component<IItem> {
 					element.style.backgroundColor = 'blue';
 					break;
 			}
-			element.textContent = category;
 		}
 	}
 
 	set category(category: string) {
 		Item.setCategoryStyle(this.itemCategory, category);
+		this.setText(this.itemCategory, category);
 	}
 
 	set image(image: string) {
@@ -84,15 +84,15 @@ export class Item extends Component<IItem> {
 	set price(price: number | null) {
 		if (this.itemPrice) {
 			if (price === null) {
-				this.itemPrice.textContent = 'Бесценно';
+				this.setText(this.itemPrice, 'Бесценно');
 			} else {
-				this.itemPrice.textContent = price.toString() + ' синапсов';
+				this.setText(this.itemPrice, price.toString() + ' синапсов');
 			}
 		}
 	}
 
 	set title(title: string) {
-		this.itemTitle.textContent = title;
+		this.setText(this.itemTitle, title);
 	}
 
 	set id(id) {

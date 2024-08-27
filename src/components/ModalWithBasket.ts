@@ -57,7 +57,7 @@ export class ModalWithBasket extends Modal<IModalWithBasket> {
 		);
 
 		if (data?.totalPrice !== undefined) {
-			this.basketTotalPrice.textContent = `${data.totalPrice} синапсов`;
+			this.setText(this.basketTotalPrice, `${data.totalPrice} синапсов`);
 		}
 		return super.render(data);
 	}

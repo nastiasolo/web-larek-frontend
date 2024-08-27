@@ -49,23 +49,25 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 
 		if (this.itemCategory) {
 			Item.setCategoryStyle(this.itemCategory, item.category);
-			this.itemCategory.textContent = item.category;
+			this.setText(this.itemCategory, item.category);
 		}
 
 		if (this.itemTitle) {
-			this.itemTitle.textContent = item.title;
+			this.setText(this.itemTitle, item.title);
 		}
 		if (this.itemImage) {
 			this.itemImage.src =
 				'https://larek-api.nomoreparties.co/content/weblarek/' + item.image;
 		}
 		if (this.itemPrice) {
-			this.itemPrice.textContent =
-				item.price !== null ? `${item.price} синапсов` : 'Бесценно';
+			this.setText(
+				this.itemPrice,
+				item.price !== null ? `${item.price} синапсов` : 'Бесценно'
+			);
 		}
 
 		if (this.itemDescription) {
-			this.itemDescription.textContent = item.description ?? '';
+			this.setText(this.itemDescription, item.description ?? '');
 		}
 
 		super.open();
@@ -81,15 +83,15 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 		if (isInBasket) {
 			// Если товар уже в корзине
 			this.addButton.disabled = true;
-			this.addButton.textContent = 'В корзине';
+			this.setText(this.addButton, 'В корзине');
 		} else if (price === null) {
 			// Если цена товара равна null
 			this.addButton.disabled = true;
-			this.addButton.textContent = 'Невозможно добавить';
+			this.setText(this.addButton, 'Невозможно добавить');
 		} else {
 			// Если товар не в корзине и цена известна
 			this.addButton.disabled = false;
-			this.addButton.textContent = 'В корзину';
+			this.setText(this.addButton, 'В корзину');
 		}
 	}
 }

@@ -22,7 +22,7 @@ export class ModalWithSucess extends Modal<IModalWithSucess> {
 
 	render(data: Partial<IModalWithSucess>): HTMLElement {
 		super.render(data);
-		this.basketTotal.textContent = `Списано ${data.total} синапсов`;
+		this.setText(this.basketTotal, `Списано ${data.total} синапсов`);
 		this.events.emit(`success:submit`);
 
 		return this.container;

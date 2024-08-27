@@ -66,11 +66,11 @@ export class Form extends Modal<IForm> {
 	}
 
 	protected showInputError() {
-		this.errorSpan.textContent = 'Заполните все поля';
+		this.setText(this.errorSpan, 'Заполните все поля');
 	}
 
 	protected hideInputError() {
-		this.errorSpan.textContent = '';
+		this.setText(this.errorSpan, '');
 	}
 
 	protected validateForm() {
