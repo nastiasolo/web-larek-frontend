@@ -43,30 +43,35 @@ export class Item extends Component<IItem> {
 		}
 	}
 
-	set category(category: string) {
-		if (this.itemCategory) {
+	public static setCategoryStyle(element: HTMLElement, category: string) {
+		if (element) {
+			element.className = 'card__category';
 			switch (category) {
 				case 'софт-скил':
-					this.itemCategory.classList.add('card__category_soft');
+					element.classList.add('card__category_soft');
 					break;
 				case 'хард-скил':
-					this.itemCategory.classList.add('card__category_hard');
+					element.classList.add('card__category_hard');
 					break;
 				case 'другое':
-					this.itemCategory.classList.add('card__category_other');
+					element.classList.add('card__category_other');
 					break;
 				case 'дополнительное':
-					this.itemCategory.classList.add('card__category_additional');
+					element.classList.add('card__category_additional');
 					break;
 				case 'кнопка':
-					this.itemCategory.classList.add('card__category_button');
+					element.classList.add('card__category_button');
 					break;
 				default:
-					this.itemCategory.style.backgroundColor = 'blue';
+					element.style.backgroundColor = 'blue';
 					break;
 			}
-			this.itemCategory.textContent = category;
+			element.textContent = category;
 		}
+	}
+
+	set category(category: string) {
+		Item.setCategoryStyle(this.itemCategory, category);
 	}
 
 	set image(image: string) {

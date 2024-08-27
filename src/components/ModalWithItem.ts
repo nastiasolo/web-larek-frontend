@@ -1,6 +1,7 @@
 import { IItem } from '../types';
 import { IEvents } from './base/events';
 import { Modal } from './common/Modal';
+import { Item } from './Item';
 
 export interface IModalWithItem {
 	addButton: HTMLButtonElement;
@@ -47,6 +48,7 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 		this.updateButtonState();
 
 		if (this.itemCategory) {
+			Item.setCategoryStyle(this.itemCategory, item.category);
 			this.itemCategory.textContent = item.category;
 		}
 
