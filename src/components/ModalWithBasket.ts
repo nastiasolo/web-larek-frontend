@@ -1,5 +1,5 @@
 import { IItem } from '../types';
-import { cloneTemplate } from '../utils/utils';
+import { cloneTemplate, ensureElement } from '../utils/utils';
 import { IEvents } from './base/events';
 import { Modal } from './common/Modal';
 import { Item } from './Item';
@@ -17,10 +17,17 @@ export class ModalWithBasket extends Modal<IModalWithBasket> {
 	constructor(container: HTMLElement, events: IEvents) {
 		super(container, events);
 
-		this.basketList = this.container.querySelector('.basket__list');
-		this.basketTotalPrice = this.container.querySelector('.basket__price');
-		this.checkoutButton = this.container.querySelector(
-			'.basket-confirm-button'
+		this.basketList = ensureElement<HTMLUListElement>(
+			'.basket__list',
+			this.container
+		);
+		this.basketTotalPrice = ensureElement<HTMLElement>(
+			'.basket__price',
+			this.container
+		);
+		this.checkoutButton = ensureElement<HTMLButtonElement>(
+			'.basket-confirm-button',
+			this.container
 		);
 
 		this.events.on('basket:update', this.render.bind(this));
@@ -71,16 +78,18 @@ export class ModalWithBasket extends Modal<IModalWithBasket> {
 		itemInstance.render(itemData);
 
 		// Порядковый номер товара в корзине
-		const indexElement = basketItemTemplate.querySelector(
-			'.basket__item-index'
+		const indexElement = ensureElement<HTMLElement>(
+			'.basket__item-index',
+			basketItemTemplate
 		);
 		if (indexElement) {
 			indexElement.textContent = (index + 1).toString();
 		}
 
 		// Добавляем событие на кнопку удаления
-		const removeButton = basketItemTemplate.querySelector(
-			'.basket__item-delete'
+		const removeButton = ensureElement<HTMLButtonElement>(
+			'.basket__item-delete',
+			basketItemTemplate
 		);
 		if (removeButton) {
 			removeButton.addEventListener('click', () => {

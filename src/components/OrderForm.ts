@@ -1,15 +1,17 @@
+import { ensureAllElements, ensureElement } from '../utils/utils';
 import { IEvents } from './base/events';
 import { Form } from './common/Form';
 
 export class OrderForm extends Form {
-	private paymentButtons: NodeListOf<HTMLButtonElement>;
+	private paymentButtons: HTMLButtonElement[];
 
 	constructor(container: HTMLElement, events: IEvents) {
 		super(container, events);
 
 		// Получаем кнопки выбора способа оплаты
-		this.paymentButtons = this.container.querySelectorAll(
-			'.order__buttons .button'
+		this.paymentButtons = ensureAllElements<HTMLButtonElement>(
+			'.order__buttons .button',
+			this.container
 		);
 		this.paymentButtons.forEach((button) => {
 			button.addEventListener(
@@ -19,9 +21,6 @@ export class OrderForm extends Form {
 		});
 
 		// Валидация полей ввода
-		// this.inputs.forEach((input) => {
-		// 	input.addEventListener('input', this.validate.bind(this));
-		// });
 		this.validateForm();
 	}
 
@@ -29,9 +28,6 @@ export class OrderForm extends Form {
 		const target = event.target as HTMLButtonElement;
 
 		// Удаляем активное состояние у всех кнопок
-		// const paymentButtons = this.container.querySelectorAll(
-		// 	'.order__buttons .button'
-		// );
 		this.paymentButtons.forEach((button) =>
 			button.classList.remove('button_alt-active')
 		);

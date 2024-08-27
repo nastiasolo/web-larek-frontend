@@ -7,7 +7,7 @@ import { Api } from './components/base/api';
 import { API_URL, settings } from './utils/constants';
 import { Item } from './components/Item';
 import { ItemsContainer } from './components/ItemsContainer';
-import { cloneTemplate } from './utils/utils';
+import { cloneTemplate, ensureElement } from './utils/utils';
 import { ModalWithItem } from './components/ModalWithItem';
 import { BasketData } from './components/BasketData';
 import { ModalWithBasket } from './components/ModalWithBasket';
@@ -26,8 +26,7 @@ events.onAll((event) => {
 });
 
 // Шаблон
-const itemTemplate: HTMLTemplateElement =
-	document.querySelector('#card-catalog');
+const itemTemplate = ensureElement<HTMLTemplateElement>('#card-catalog');
 
 // Модель данных
 const itemsData = new ItemData(events);
@@ -36,26 +35,32 @@ const userData = new UserData();
 
 //Модальные окна
 const itemModal = new ModalWithItem(
-	document.querySelector('#info-modal'),
+	ensureElement<HTMLElement>('#info-modal'),
 	events
 );
 
 const basketModal = new ModalWithBasket(
-	document.querySelector('#basket-modal'),
+	ensureElement<HTMLElement>('#basket-modal'),
 	events
 );
 
 const successModal = new ModalWithSucess(
-	document.querySelector('.success-modal'),
+	ensureElement<HTMLElement>('.success-modal'),
 	events
 );
 
 //Формы
-const orderForm = new OrderForm(document.querySelector('#order-modal'), events);
-const contactForm = new Form(document.querySelector('#contact-modal'), events);
+const orderForm = new OrderForm(
+	ensureElement<HTMLElement>('#order-modal'),
+	events
+);
+const contactForm = new Form(
+	ensureElement<HTMLElement>('#contact-modal'),
+	events
+);
 
 //Кнопка корзины и обработчик клика
-const basketButton = document.querySelector('.header__basket');
+const basketButton = ensureElement<HTMLButtonElement>('.header__basket');
 basketButton.addEventListener('click', () => {
 	events.emit('basket:open', {
 		items: basketData.getItems(),
@@ -64,7 +69,7 @@ basketButton.addEventListener('click', () => {
 });
 
 //Счетчик товаров в корзине
-const basketCounter = document.querySelector('.header__basket-counter');
+const basketCounter = ensureElement<HTMLElement>('.header__basket-counter');
 
 // Корзина открыта
 events.on('basket:open', (data: { items: IItem[]; totalPrice: number }) => {
@@ -73,7 +78,9 @@ events.on('basket:open', (data: { items: IItem[]; totalPrice: number }) => {
 });
 
 // Контейнер - "галлерея"
-const itemsContainer = new ItemsContainer(document.querySelector('.gallery'));
+const itemsContainer = new ItemsContainer(
+	ensureElement<HTMLElement>('.gallery')
+);
 
 // Получаем карточки с сервера
 Promise.all([api.getItems()])

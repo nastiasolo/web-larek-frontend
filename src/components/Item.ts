@@ -1,6 +1,7 @@
 import { IEvents } from './base/events';
 import { IItem } from '../types/index';
 import { Component } from './Component';
+import { ensureElement } from '../utils/utils';
 
 export class Item extends Component<IItem> {
 	protected element: HTMLElement;
@@ -18,9 +19,12 @@ export class Item extends Component<IItem> {
 		this.events = events;
 
 		this.itemCategory = this.container.querySelector('.card__category');
-		this.itemTitle = this.container.querySelector('.card__title');
+		this.itemTitle = ensureElement<HTMLElement>('.card__title', this.container);
 		this.itemImage = this.container.querySelector('.card__image');
-		this.itemPrice = this.container.querySelector('.card__price');
+		this.itemPrice = ensureElement<HTMLSpanElement>(
+			'.card__price',
+			this.container
+		);
 		this.itemDescription =
 			this.container.querySelector('.card__text') ?? undefined;
 		this.itemButton = this.container.querySelector('.card-add-button');

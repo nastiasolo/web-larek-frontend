@@ -1,4 +1,5 @@
 import { IItem } from '../types';
+import { ensureElement } from '../utils/utils';
 import { IEvents } from './base/events';
 import { Modal } from './common/Modal';
 import { Item } from './Item';
@@ -14,7 +15,7 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 	private itemTitle: HTMLElement;
 	private itemImage: HTMLImageElement;
 	private itemPrice: HTMLSpanElement;
-	private itemDescription?: HTMLElement;
+	private itemDescription: HTMLElement;
 	private currentItem: IItem | null = null;
 	private handleAddButtonClick: () => void;
 
@@ -22,13 +23,25 @@ export class ModalWithItem extends Modal<IModalWithItem> {
 		super(container, events);
 		this.events = events;
 
-		this.addButton = this.container.querySelector('.button');
-		this.itemCategory = this.container.querySelector('.card__category');
-		this.itemTitle = this.container.querySelector('.card__title');
-		this.itemImage = this.container.querySelector('.card__image');
-		this.itemPrice = this.container.querySelector('.card__price');
+		this.addButton = ensureElement<HTMLButtonElement>(
+			'.button',
+			this.container
+		);
+		this.itemCategory = ensureElement<HTMLSpanElement>(
+			'.card__category',
+			this.container
+		);
+		this.itemTitle = ensureElement<HTMLElement>('.card__title', this.container);
+		this.itemImage = ensureElement<HTMLImageElement>(
+			'.card__image',
+			this.container
+		);
+		this.itemPrice = ensureElement<HTMLSpanElement>(
+			'.card__price',
+			this.container
+		);
 		this.itemDescription =
-			this.container.querySelector('.card__text') ?? undefined;
+			ensureElement<HTMLElement>('.card__text', this.container) ?? undefined;
 
 		this.handleAddButtonClick = () => {
 			if (this.currentItem) {

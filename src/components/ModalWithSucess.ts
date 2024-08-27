@@ -1,3 +1,4 @@
+import { ensureElement } from '../utils/utils';
 import { IEvents } from './base/events';
 import { Modal } from './common/Modal';
 
@@ -12,8 +13,14 @@ export class ModalWithSucess extends Modal<IModalWithSucess> {
 	constructor(container: HTMLElement, events: IEvents) {
 		super(container, events);
 		// Элемент для отображения общей суммы
-		this.basketTotal = container.querySelector('.order-success__description');
-		this.sucessButton = container.querySelector('.order-success__close');
+		this.basketTotal = ensureElement<HTMLElement>(
+			'.order-success__description',
+			container
+		);
+		this.sucessButton = ensureElement<HTMLButtonElement>(
+			'.order-success__close',
+			container
+		);
 
 		this.sucessButton.addEventListener('click', () => {
 			this.close();

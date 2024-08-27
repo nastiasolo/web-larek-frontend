@@ -1,3 +1,4 @@
+import { ensureAllElements, ensureElement } from '../../utils/utils';
 import { IEvents } from '../base/events';
 import { Modal } from './Modal';
 
@@ -8,7 +9,7 @@ interface IForm {
 }
 
 export class Form extends Modal<IForm> {
-	protected inputs: NodeListOf<HTMLInputElement>;
+	protected inputs: HTMLInputElement[];
 	protected _form: HTMLFormElement;
 	protected errors: Record<string, string>;
 	protected formName: string;
@@ -17,12 +18,17 @@ export class Form extends Modal<IForm> {
 
 	constructor(container: HTMLElement, events: IEvents) {
 		super(container, events);
-		this.inputs =
-			this.container.querySelectorAll<HTMLInputElement>('.form__input');
-		this._form = this.container.querySelector('.form');
+		this.inputs = ensureAllElements<HTMLInputElement>(
+			'.form__input',
+			this.container
+		);
+		this._form = ensureElement<HTMLFormElement>('.form', this.container);
 		this.formName = this._form.getAttribute('name');
-		this.submitButton = this._form.querySelector('.button-submit');
-		this.errorSpan = this._form.querySelector('.form__errors');
+		this.submitButton = ensureElement<HTMLButtonElement>(
+			'.button-submit',
+			this._form
+		);
+		this.errorSpan = ensureElement<HTMLElement>('.form__errors', this._form);
 
 		this._form.addEventListener('submit', (evt) => {
 			evt.preventDefault();
